@@ -1,8 +1,8 @@
 import Arena
 from MCTS import MCTS
-from othello.OthelloGame import OthelloGame
-from othello.OthelloPlayers import *
-from othello.pytorch.NNet import NNetWrapper as NNet
+from ConnectX.ConnectXGame import ConnectXGame
+from ConnectX.ConnectXPlayers import *
+#from othello.pytorch.NNet import NNetWrapper as NNet
 
 
 import numpy as np
@@ -14,20 +14,21 @@ any agent.
 """
 
 mini_othello = False  # Play in 6x6 instead of the normal 8x8.
-human_vs_cpu = True
-
+human_vs_cpu = False
+'''
 if mini_othello:
     g = OthelloGame(6)
 else:
     g = OthelloGame(8)
-
+'''
+g = ConnectXGame()
 # all players
 rp = RandomPlayer(g).play
-gp = GreedyOthelloPlayer(g).play
-hp = HumanOthelloPlayer(g).play
+#gp = GreedyOthelloPlayer(g).play
+hp = HumanConnectXPlayer(g).play
 
 
-
+'''
 # nnet players
 n1 = NNet(g)
 if mini_othello:
@@ -48,7 +49,9 @@ else:
     n2p = lambda x: np.argmax(mcts2.getActionProb(x, temp=0))
 
     player2 = n2p  # Player 2 is neural network if it's cpu vs cpu.
-
-arena = Arena.Arena(n1p, player2, g, display=OthelloGame.display)
+'''
+player1 = hp
+player2 = hp
+arena = Arena.Arena(player1, player2, g, display=ConnectXGame.display)
 
 print(arena.playGames(2, verbose=True))

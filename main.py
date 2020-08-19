@@ -3,17 +3,29 @@ import logging
 import coloredlogs
 
 from Coach import Coach
-from othello.OthelloGame import OthelloGame as Game
-from othello.pytorch.NNet import NNetWrapper as nn
+from ConnectX.ConnectXGame import ConnectXGame as Game
+from ConnectX.keras.NNet import NNetWrapper as nn
 from utils import *
 
+'''
+from Coach import Coach
+from tictactoe.TicTacToeGame import TicTacToeGame as Game
+from tictactoe.keras.NNet import NNetWrapper as nn
+from utils import *
+
+
+from Coach import Coach
+from othello.OthelloGame import OthelloGame as Game
+from othello.keras.NNet import NNetWrapper as nn
+from utils import *
+'''
 log = logging.getLogger(__name__)
 
 coloredlogs.install(level='INFO')  # Change this to DEBUG to see more info.
 
 args = dotdict({
     'numIters': 1000,
-    'numEps': 100,              # Number of complete self-play games to simulate during a new iteration.
+    'numEps': 10,              # Number of complete self-play games to simulate during a new iteration.
     'tempThreshold': 15,        #
     'updateThreshold': 0.6,     # During arena playoff, new neural net will be accepted if threshold or more of games are won.
     'maxlenOfQueue': 200000,    # Number of game examples to train the neural networks.
@@ -31,7 +43,7 @@ args = dotdict({
 
 def main():
     log.info('Loading %s...', Game.__name__)
-    g = Game(6)
+    g = Game()
 
     log.info('Loading %s...', nn.__name__)
     nnet = nn(g)
