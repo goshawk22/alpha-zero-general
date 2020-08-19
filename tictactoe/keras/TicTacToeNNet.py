@@ -3,9 +3,9 @@ sys.path.append('..')
 from utils import *
 
 import argparse
-from tensorflow.keras.models import *
-from tensorflow.keras.layers import *
-from tensorflow.keras.optimizers import *
+from keras.models import *
+from keras.layers import *
+from keras.optimizers import *
 
 """
 NeuralNet for the game of TicTacToe.

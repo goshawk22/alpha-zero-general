@@ -83,6 +83,7 @@ class TicTacToeGame(Game):
         newB = np.reshape(board, (self.n*self.n, self.n))
         newPi = pi_board
         for i in range(1,5):
+
             for z in [True, False]:
                 for j in [True, False]:
                     if j:
