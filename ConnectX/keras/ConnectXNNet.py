@@ -3,9 +3,18 @@ sys.path.append('..')
 from utils import *
 
 import argparse
-from tensorflow.keras.models import *
-from tensorflow.keras.layers import *
-from tensorflow.keras.optimizers import *
+
+import tensorflow as tf
+tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
+from keras.models import *
+from keras.layers import *
+from keras.optimizers import *
+
+from keras.backend.tensorflow_backend import set_session
+
+gpu_options = tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=0.3)
+sess = tf.compat.v1.Session(config=tf.compat.v1.ConfigProto(gpu_options=gpu_options))
+set_session(sess)  # set this TensorFlow session as the default session for Keras
 
 class ConnectXNNet():
     def __init__(self, game, args):

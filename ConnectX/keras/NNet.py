@@ -10,6 +10,15 @@ sys.path.append('..')
 from utils import *
 from NeuralNet import NeuralNet
 
+import tensorflow as tf
+from keras.backend.tensorflow_backend import set_session
+
+gpu_options = tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=0.3)
+sess = tf.compat.v1.Session(config=tf.compat.v1.ConfigProto(gpu_options=gpu_options))
+set_session(sess)  # set this TensorFlow session as the default session for Keras
+
+tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
+
 import argparse
 from .ConnectXNNet import ConnectXNNet as onnet
 
@@ -17,9 +26,9 @@ args = dotdict({
     'lr': 0.001,
     'dropout': 0.3,
     'epochs': 10,
-    'batch_size': 64,
+    'batch_size': 32,
     'cuda': True,
-    'num_channels': 512,
+    'num_channels': 256,
 })
 
 class NNetWrapper(NeuralNet):
@@ -54,18 +63,19 @@ class NNetWrapper(NeuralNet):
         #print('PREDICTION TIME TAKEN : {0:03f}'.format(time.time()-start))
         return pi[0], v[0]
 
-    def save_checkpoint(self, folder='checkpoint', filename='temp'):
+    def save_checkpoint(self, folder='checkpoint', filename='checkpoint.pth.tar'):
         filepath = os.path.join(folder, filename)
         if not os.path.exists(folder):
             print("Checkpoint Directory does not exist! Making directory {}".format(folder))
             os.mkdir(folder)
         else:
             print("Checkpoint Directory exists! ")
-        self.nnet.model.save_weights(filepath)
 
-    def load_checkpoint(self, folder='checkpoint', filename='temp'):
-        # https://github.com/pytorch/examples/blob/master/imagenet/main.py#L98
+        self.nnet.model.save(filepath)
+
+    def load_checkpoint(self, folder='checkpoint', filename='checkpoint.pth.tar'):
         filepath = os.path.join(folder, filename)
         if not os.path.exists(filepath):
-            raise FileNotFoundError("No model in path ", filepath)
-        self.nnet.model.load_weights(filepath)
+            raise ("No model in path {}".format(filepath))
+        
+        self.nnet.model = tf.keras.models.load_model(filepath)
